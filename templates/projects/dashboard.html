@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Mis Proyectos</h2>
+{% if projects %}
+    <ul>
+        {% for project in projects %}
+            <li>
+                <a href="{% url 'project_detail' project.pk %}">{{ project.name }}</a>
+                - {{ project.get_status_display }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No estás asignado a ningún proyecto actualmente.</p>
+{% endif %}
+{% endblock %}

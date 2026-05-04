@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{% if object %}Editar{% else %}Crear{% endif %} Tarea</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar Tarea</button>
+</form>
+<a href="{% url 'project_detail' request.resolver_match.kwargs.pk %}">Cancelar</a>
+{% endblock %}

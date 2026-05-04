@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ project.name }}</h2>
+<p>{{ project.description }}</p>
+<p><strong>Estado:</strong> {{ project.get_status_display }}</p>
+<p><strong>Fecha de inicio:</strong> {{ project.start_date }}</p>
+<p><strong>Fecha de fin:</strong> {{ project.end_date }}</p>
+
+<h3>Tareas</h3>
+<a href="{% url 'task_create' project.pk %}">Crear Nueva Tarea</a>
+
+{% if project.tasks.all %}
+    <ul>
+        {% for task in project.tasks.all %}
+            <li>
+                <strong>{{ task.title }}</strong> - {{ task.get_status_display }}
+                (Asignado a: {{ task.assigned_to.username|default:"Nadie" }})
+                <a href="{% url 'task_edit' project.pk task.pk %}">Editar</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay tareas en este proyecto.</p>
+{% endif %}
+
+<a href="{% url 'dashboard' %}">Volver al Dashboard</a>
+{% endblock %}
