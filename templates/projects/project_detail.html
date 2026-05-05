@@ -7,6 +7,15 @@
 <p><strong>Fecha de inicio:</strong> {{ project.start_date }}</p>
 <p><strong>Fecha de fin:</strong> {{ project.end_date }}</p>
 
+<hr>
+
+<h3>Progreso del Proyecto</h3>
+<div style="width: 300px; height: 300px;">
+    <canvas id="progressChart"></canvas>
+</div>
+
+<hr>
+
 <h3>Tareas</h3>
 <a href="{% url 'task_create' project.pk %}">Crear Nueva Tarea</a>
 
@@ -24,5 +33,64 @@
     <p>No hay tareas en este proyecto.</p>
 {% endif %}
 
+<hr>
+
+<h3>Mensajes Internos</h3>
+<div>
+    <form method="post" action="{% url 'message_create' project.pk %}">
+        {% csrf_token %}
+        {{ message_form.as_p }}
+        <button type="submit">Enviar Mensaje</button>
+    </form>
+</div>
+
+<div style="margin-top: 20px;">
+    {% for message in messages %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <strong>{{ message.sender.username }}</strong> 
+            <small>({{ message.timestamp|date:"d M Y H:i" }})</small>
+            <p>{{ message.content }}</p>
+        </div>
+    {% empty %}
+        <p>No hay mensajes en este proyecto aún.</p>
+    {% endfor %}
+</div>
+
+<br>
 <a href="{% url 'dashboard' %}">Volver al Dashboard</a>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const total = parseInt("{{ total_tasks|default:'0' }}", 10);
+        const completed = parseInt("{{ completed_tasks|default:'0' }}", 10);
+        const pending = total - completed;
+        
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        
+        if (total === 0) {
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Sin Tareas'],
+                    datasets: [{
+                        data: [1],
+                        backgroundColor: ['#e0e0e0']
+                    }]
+                }
+            });
+        } else {
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Completadas', 'Pendientes/En Progreso'],
+                    datasets: [{
+                        data: [completed, pending],
+                        backgroundColor: ['#4caf50', '#ff9800']
+                    }]
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}
