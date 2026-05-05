@@ -3,8 +3,8 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse
-from .forms import CustomUserCreationForm, TaskForm
-from .models import Project, Task
+from .forms import CustomUserCreationForm, TaskForm, MessageForm
+from .models import Project, Task, Message
 from .mixins import ProjectRoleRequiredMixin
 
 def register_view(request):
@@ -30,6 +30,33 @@ class ProjectDetailView(LoginRequiredMixin, ProjectRoleRequiredMixin, DetailView
     model = Project
     template_name = 'projects/project_detail.html'
     context_object_name = 'project'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        project = self.get_object()
+        
+        tasks = project.tasks.all()
+        total_tasks = tasks.count()
+        completed_tasks = tasks.filter(status='completado').count()
+        
+        context['total_tasks'] = total_tasks
+        context['completed_tasks'] = completed_tasks
+        context['message_form'] = MessageForm()
+        context['messages'] = project.messages.all().order_by('-timestamp')
+        return context
+
+class MessageCreateView(LoginRequiredMixin, ProjectRoleRequiredMixin, CreateView):
+    model = Message
+    form_class = MessageForm
+    
+    def form_valid(self, form):
+        project = get_object_or_404(Project, pk=self.kwargs['pk'])
+        form.instance.project = project
+        form.instance.sender = self.request.user
+        return super().form_valid(form)
+        
+    def get_success_url(self):
+        return reverse('project_detail', kwargs={'pk': self.kwargs['pk']})
 
 class TaskCreateView(LoginRequiredMixin, ProjectRoleRequiredMixin, CreateView):
     model = Task
