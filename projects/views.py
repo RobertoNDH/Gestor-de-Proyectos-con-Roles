@@ -55,6 +55,9 @@ class MessageCreateView(LoginRequiredMixin, ProjectRoleRequiredMixin, CreateView
         form.instance.sender = self.request.user
         return super().form_valid(form)
         
+    def form_invalid(self, form):
+        return redirect('project_detail', pk=self.kwargs['pk'])
+
     def get_success_url(self):
         return reverse('project_detail', kwargs={'pk': self.kwargs['pk']})
 
@@ -82,6 +85,9 @@ class TaskUpdateView(LoginRequiredMixin, ProjectRoleRequiredMixin, UpdateView):
     form_class = TaskForm
     template_name = 'projects/task_form.html'
     pk_url_kwarg = 'task_pk'
+
+    def get_queryset(self):
+        return Task.objects.filter(project_id=self.kwargs['pk'])
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
