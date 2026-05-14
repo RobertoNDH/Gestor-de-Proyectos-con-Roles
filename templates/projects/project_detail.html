@@ -10,7 +10,7 @@
 <hr>
 
 <h3>Progreso del Proyecto</h3>
-<div style="width: 300px; height: 300px;">
+<div class="chart-container">
     <canvas id="progressChart"></canvas>
 </div>
 
@@ -44,9 +44,9 @@
     </form>
 </div>
 
-<div style="margin-top: 20px;">
+<div class="messages-container">
     {% for message in messages %}
-        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+        <div class="message-box">
             <strong>{{ message.sender.username }}</strong> 
             <small>({{ message.timestamp|date:"d M Y H:i" }})</small>
             <p>{{ message.content }}</p>
