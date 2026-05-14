@@ -1,4 +1,5 @@
 from pathlib import Path
+# pyrefly: ignore [missing-import]
 import environ
 import os
 
@@ -12,7 +13,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-ws)0cybnmukm4shrpd3+drbk6qkik5+j670zo4%t-xq-*pcwd5')
 
-DEBUG = env('DEBUG')
+DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
