@@ -107,7 +107,6 @@ p {
     color: #cbd5e1;
 }
 
-/* Glassmorphism Cards */
 .card, form, .message-box {
     background: var(--card-bg);
     backdrop-filter: blur(16px);
@@ -140,7 +139,6 @@ ul li:hover {
     border-color: var(--accent-primary);
 }
 
-/* Forms */
 input, textarea, select {
     width: 100%;
     padding: 0.8rem 1rem;
@@ -166,7 +164,6 @@ hr {
     margin: 2rem 0;
 }
 
-/* Dashboard specific */
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -182,7 +179,6 @@ hr {
     color: var(--accent-primary);
 }
 
-/* Messages */
 .message-box {
     padding: 1.5rem;
 }
@@ -196,7 +192,6 @@ hr {
     font-size: 0.85rem;
 }
 
-/* Chart container */
 .chart-container {
     width: 100%;
     max-width: 400px;
