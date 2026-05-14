@@ -17,7 +17,9 @@
 <hr>
 
 <h3>Tareas</h3>
-<a href="{% url 'task_create' project.pk %}">Crear Nueva Tarea</a>
+<div style="margin-bottom: 1.5rem;">
+    <a href="{% url 'task_create' project.pk %}" class="btn">Crear Nueva Tarea</a>
+</div>
 
 {% if project.tasks.all %}
     <ul>
